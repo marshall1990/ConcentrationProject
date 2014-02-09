@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+	<step message="Wybierz lewy przycisk!" points="1">
+		<button text="czerwony" color="czerwony" background=""></button>
+		<button text="zielony" color="czerwony" background=""></button>
+	</step>
+	<step message="Wybierz lewy przycisk!" points="1">
+		<button text="czerwony" color="zielony" background="czerwony"></button>
+		<button text="zielony" color="zielony" background="czerwony"></button>
+	</step>
+	<step message="" points="2">
+		<button text="czerwony" color="zielony" background="żółty"></button>
+		<button text="zielony" color="czerwony" background="zielony"></button>
+		<button text="żółty" color="żółty" background="szary"></button>
+	</step>
+	<step message="Wybierz lewy przycisk!" points="1">
+		<button text="czerwony" color="czerwony" background="żółty"></button>
+		<button text="zielony" color="czerwony" background="żółty"></button>
+	</step>
+</scenario>
