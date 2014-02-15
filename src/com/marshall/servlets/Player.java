@@ -10,6 +10,7 @@ public class Player {
 	private Hashtable<Integer, Boolean> questionsList;
 	private Hashtable<Integer, Double> timesList;
 	private double time;
+	private int scenarioId;
 
 	public String getName() {
 		return name;
@@ -57,6 +58,14 @@ public class Player {
 
 	public void setTime(double time) {
 		this.time = time;
+	}
+
+	public int getScenarioId() {
+		return scenarioId;
+	}
+
+	public void setScenarioId(int scenarioId) {
+		this.scenarioId = scenarioId;
 	}
 
 }

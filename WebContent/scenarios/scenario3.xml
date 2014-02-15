@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+	<step message="" points="2">
+		<button text="oliwkowy" color="oliwkowy" background="niebieski"></button>
+		<button text="biały" color="czerwony" background="zielony"></button>
+		<button text="zielony" color="żółty" background="szary"></button>
+	</step>
+	<step message="" points="2">
+		<button text="czerwony" color="żółty" background="czarny"></button>
+		<button text="turkusowy" color="turkusowy" background="kasztanowy"></button>
+		<button text="fuksjowy" color="zielony" background="granatowy"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz lawendowy!" points="3">
+		<button text="czerwony" color="żółty" background="czarny"></button>
+		<button text="turkusowy" color="turkusowy" background="kasztanowy"></button>
+		<button text="fuksjowy" color="zielony" background="granatowy"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz granatowy!" points="3">
+		<button text="czerwony" color="brązowy" background="srebrny"></button>
+		<button text="purpurowy" color="czarny" background="szary"></button>
+		<button text="granatowy" color="granatowy" background="żółty"></button>
+	</step>
+	<step message="Podpowiedź: Żadna odpowiedź nie jest prawidłowa!" points="3">
+		<button text="żółty" color="niebieski" background="fuksjowy"></button>
+		<button text="fuksjowy" color="czarny" background="niebieski"></button>
+		<button text="koralowy" color="koralowy" background="zielony"></button>
+	</step>
+	<step message="" points="3">
+		<button text="różowy" color="zielony" background=""></button>
+		<button text="purpurowy" color="purpurowy" background=""></button>
+		<button text="złoty" color="szary" background=""></button>
+		<button text="koralowy" color="turkusowy" background=""></button>
+	</step>
+	<step message="Podpowiedź: Wybierz granatowy!" points="4">
+		<button text="biały" color="czarny" background="biały"></button>
+		<button text="srebrny" color="żółty" background="srebrny"></button>
+		<button text="purpurowy" color="purpurowy" background="pomarańczowy"></button>
+		<button text="pomarańczowy" color="zielony" background="purpurowy"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz oliwkowy!" points="4">
+		<button text="limonkowy" color="czarny" background="fuksjowy"></button>
+		<button text="kasztanowy" color="kasztanowy" background="żółty"></button>
+		<button text="oliwkowy" color="zielony" background="kasztanowy"></button>
+		<button text="fuksjowy" color="pomarańczowy" background="czarny"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz czarny!" points="4">
+		<button text="koralowy" color="koralowy" background="granatowy"></button>
+		<button text="pomarańczowy" color="niebieski" background="biały"></button>
+		<button text="czarny" color="żółty" background="zielony"></button>
+		<button text="kasztanowy" color="żółty" background="srebrny"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz biały" points="4">
+		<button text="zielony" color="biały" background="czerwony"></button>
+		<button text="żółty" color="biały" background="granatowy"></button>
+		<button text="niebieski" color="biały" background="niebieski"></button>
+		<button text="biały" color="biały" background="purpurowy"></button>
+	</step>
+</scenario>

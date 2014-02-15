@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+	<step message="" points="1">
+		<button text="pomrańczowy" color="czerwony" background=""></button>
+		<button text="zielony" color="zielony" background=""></button>
+	</step>
+	<step message="Podpowiedź: Wybierz zielony!" points="2">
+		<button text="czerwony" color="czerwony" background="pomarańczowy"></button>
+		<button text="zielony" color="czerwony" background="pomarańczowy"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz srebrny!" points="2">
+		<button text="niebieski" color="żółty" background="niebieski"></button>
+		<button text="srebrny" color="srebrny" background="niebieski"></button>
+	</step>
+	<step message="" points="2">
+		<button text="czerwony" color="żółty" background="zielony"></button>
+		<button text="złoty" color="złoty" background="niebieski"></button>
+		<button text="pomarańczowy" color="srebrny" background="purpurowy"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz zielony!" points="3">
+		<button text="purpurowy" color="czarny" background="biały"></button>
+		<button text="zielony" color="zielony" background="złoty"></button>
+		<button text="biały" color="srebrny" background="czerwony"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz purpurowy!" points="3">
+		<button text="purpurowy" color="srebrny" background="czarny"></button>
+		<button text="biały" color="biały" background="brązowy"></button>
+		<button text="złoty" color="srebrny" background="niebieski"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz czerwony!" points="3">
+		<button text="żółty" color="żółty" background="zielony"></button>
+		<button text="czerwony" color="żółty" background="niebieski"></button>
+		<button text="biały" color="czarny" background="oliwkowy"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz purpurowy!" points="3">
+		<button text="złoty" color="żółty" background="czarny"></button>
+		<button text="srebrny" color="srebrny" background="granatowy"></button>
+		<button text="lawendowy" color="niebieski" background="brązowy"></button>
+	</step>
+	<step message="Podpowiedź: Żadna odpowiedź nie jest prawidłowa!" points="4">
+		<button text="żółty" color="niebieski" background="żółty"></button>
+		<button text="biały" color="szary" background="biały"></button>
+		<button text="czarny" color="czarny" background="limonkowy"></button>
+	</step>
+	<step message="" points="2">
+		<button text="żółty" color="zielony" background=""></button>
+		<button text="zielony" color="zielony" background=""></button>
+		<button text="czerwony" color="zielony" background=""></button>
+	</step>
+</scenario>

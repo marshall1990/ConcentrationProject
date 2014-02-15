@@ -1,6 +1,5 @@
 package com.marshall.servlets;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -10,12 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/HelloServlet")
 public class MainServlet extends HttpServlet {
@@ -26,11 +20,14 @@ public class MainServlet extends HttpServlet {
 	private Hashtable<Integer, Boolean> questionsList = new Hashtable<Integer, Boolean>();
 	private Hashtable<Integer, Double> timesList = new Hashtable<Integer, Double>();
 	private long start, stop;
-	private int numberLastNode;
-	private int points, sumPoints;
+	private int numberLastNode, points, sumPoints, testNumber;
 	private ArrayList<Player> players;
 	private boolean getHistoryData = true;
-
+	private boolean isResultTable = true;
+	private boolean isHistory = false;
+	private ArrayList<Object> scenarios;
+	private XMLParser xmlParser;
+	
 	public MainServlet() {
 		super();
 	}
@@ -40,11 +37,12 @@ public class MainServlet extends HttpServlet {
 
 		response.setCharacterEncoding("UTF-8");
 
-		boolean isResultTable = true;
-		boolean isHistory = false;
+		isResultTable = true;
+		isHistory = false;
 		
 		if (interaction < 0) {
-			parserXML();
+			xmlParser = new XMLParser(getServletContext());
+			scenarios = xmlParser.findScenarios();
 			interaction++;
 		}
 
@@ -57,8 +55,15 @@ public class MainServlet extends HttpServlet {
 		} else if (Boolean.parseBoolean(request.getParameter("history"))) {
 			isHistory = true;
 			isResultTable = false;
+		} else if (request.getParameter("username") != null) {
+			player.setName(request.getParameter("username"));
+			testNumber = Integer.parseInt(request.getParameter("test"));
+			scenarioObjectList = (ArrayList<ScenarioObject>) scenarios.get(testNumber);
+			numberLastNode = xmlParser.getNumbers().get(testNumber);
+			player.setScenarioId(testNumber);
+			clearPoints();
 		} else if (Boolean.parseBoolean(request.getParameter("end"))) {
-			response.sendRedirect(request.getContextPath() + "/index.html");
+			response.sendRedirect(request.getContextPath() + "/index.jsp");
 			interaction = 0;
 			isResultTable = false;
 			clearPoints();
@@ -74,69 +79,21 @@ public class MainServlet extends HttpServlet {
 			timesList.put(interaction, ((stop - start) / 1000.0));
 			player.setTimesList(timesList);
 			interaction++;
-		} else if (request.getParameter("username") != null) {
-			player.setName(request.getParameter("username"));
-			clearPoints();
 		}
 
 		PrintWriter writer = response.getWriter();
 
 		writer.print("<!DOCTYPE html><html><head><meta charset=\"UTF-8\" /><title>Badanie koncentracji</title>");
-		writer.print("<link rel=\"stylesheet\" href=\""
-				+ request.getContextPath() + "/css/style.css"
-				+ "\" type=\"text/css\" />");
-		writer.print("<link rel=\"stylesheet\" href=\""
-				+ request.getContextPath() + "/css/colors.css"
-				+ "\" type=\"text/css\" />");
-		writer.print("<link rel=\"stylesheet\" href=\""
-				+ request.getContextPath() + "/css/backgrounds.css"
-				+ "\" type=\"text/css\" />");
+		writer.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\"/>");
+		writer.print("<link rel=\"stylesheet\" href=\"" + request.getContextPath() + "/css/style.css" + "\" type=\"text/css\" />");
+		writer.print("<link rel=\"stylesheet\" href=\"" + request.getContextPath() + "/css/colors.css" + "\" type=\"text/css\" />");
+		writer.print("<link rel=\"stylesheet\" href=\"" + request.getContextPath() + "/css/backgrounds.css" + "\" type=\"text/css\" />");
+		writer.println("<link rel=\"stylesheet\" media=\"(max-width: 640px)\" href=\"css/mobile.css\" type=\"text/css\" />");
 		writer.print("</head><body>");
 		writer.print("<div class=\"papers\">");
 
 		if (scenarioObjectList.size() > 0 && interaction <= numberLastNode) {
-			writer.print("<h1> Wybierz zgodny kolor tekstu z napisem</h1>");
-			
-			writer.print("<form class=\"quiz\" method=\"post\" action=\"MainServlet\">");
-
-			for (int i = 0; i < scenarioObjectList.size(); i++) {
-				boolean messageCondition = (i > 0) && scenarioObjectList.get(i).getNodeId() != scenarioObjectList.get(i-1).getNodeId();
-				
-				if (scenarioObjectList.get(i).getNodeId() == interaction) {
-					if ((i == 0 || messageCondition) && !scenarioObjectList.get(i).getMessage().equals("")) {
-						writer.println("<h2>" + scenarioObjectList.get(interaction).getMessage() + "</h2>");
-					}
-					
-					if ((i == 0 || messageCondition)) {
-						points = scenarioObjectList.get(i).getPoints();
-						sumPoints += points;
-					}
-
-					boolean isCorrect = scenarioObjectList.get(i).getText()
-							.equals(scenarioObjectList.get(i).getColor());
-					String color, background;
-					if (!scenarioObjectList.get(i).getColor().equals(""))
-						color = Colors.valueOf(scenarioObjectList.get(i).getColor().toUpperCase()).value;
-					else 
-						color = "";
-
-					if (!scenarioObjectList.get(i).getBackground().equals(""))
-						background = Colors.valueOf(scenarioObjectList.get(i).getBackground().toUpperCase()).value;
-					else
-						background = "";
-
-					writer.print("<button class=\"" + color + " bg_"
-							+ background + "\" name=\"button\" value=\""
-							+ isCorrect + "\" type=\"sumbit\">"
-							+ scenarioObjectList.get(i).getText() + "</button>");
-
-					isResultTable = false;
-				}
-			}
-
-			writer.print("</form>");
-			
-			progressBar(writer);
+			quizScreen(writer);
 		}
 
 		if (isResultTable) {
@@ -153,6 +110,51 @@ public class MainServlet extends HttpServlet {
 
 		start = System.currentTimeMillis();
 
+	}
+	
+	private void quizScreen(PrintWriter writer) {
+		writer.print("<h1> Wybierz zgodny kolor tekstu z napisem</h1>");
+		
+		writer.print("<form class=\"quiz\" method=\"post\" action=\"MainServlet\">");
+
+		for (int i = 0; i < scenarioObjectList.size(); i++) {
+			boolean messageCondition = (i > 0) && scenarioObjectList.get(i).getNodeId() != scenarioObjectList.get(i-1).getNodeId();
+			
+			if (scenarioObjectList.get(i).getNodeId() == interaction) {
+				if ((i == 0 || messageCondition) && !scenarioObjectList.get(i).getMessage().equals("")) {
+					writer.println("<h2>" + scenarioObjectList.get(i).getMessage() + "</h2>");
+				}
+				
+				if ((i == 0 || messageCondition)) {
+					points = scenarioObjectList.get(i).getPoints();
+					sumPoints += points;
+				}
+
+				boolean isCorrect = scenarioObjectList.get(i).getText()
+						.equals(scenarioObjectList.get(i).getColor());
+				String color, background;
+				if (!scenarioObjectList.get(i).getColor().equals(""))
+					color = Colors.valueOf(scenarioObjectList.get(i).getColor().toUpperCase()).value;
+				else 
+					color = "";
+
+				if (!scenarioObjectList.get(i).getBackground().equals(""))
+					background = Colors.valueOf(scenarioObjectList.get(i).getBackground().toUpperCase()).value;
+				else
+					background = "";
+
+				writer.print("<button class=\"" + color + " bg_"
+						+ background + "\" name=\"button\" value=\""
+						+ isCorrect + "\" type=\"sumbit\">"
+						+ scenarioObjectList.get(i).getText() + "</button>");
+
+				isResultTable = false;
+			}
+		}
+
+		writer.print("</form>");
+		
+		progressBar(writer);
 	}
 	
 	private void resultScreen(PrintWriter writer) {
@@ -188,7 +190,7 @@ public class MainServlet extends HttpServlet {
 	
 	private void historyScreen(PrintWriter writer) {
 		writer.println("<h1>Ranking najlepszych uczestników</h1>");
-		writer.println("<table>");
+		writer.println("<table class=\"history\">");
 		writer.println("<tr>");
 		writer.println("<th>Miejsce</th>");
 		writer.println("<th>Osoba</th>");
@@ -198,7 +200,7 @@ public class MainServlet extends HttpServlet {
 		
 		if (getHistoryData) {
 			DatabaseManager databaseManager = new DatabaseManager();
-			players = databaseManager.getTheBestPlayers();
+			players = databaseManager.getTheBestPlayers(testNumber);
 		}
 
 		for (int i = 0; i < players.size(); i++) {
@@ -231,52 +233,6 @@ public class MainServlet extends HttpServlet {
 			writer.println("<li class=\"circle" + ((i <= interaction) ? "" : " bg_gray") + "\"><li>");
 		}
 		writer.println("</ul>");
-	}
-	
-	private void parserXML() {
-		try {
-			File xmlFile = new File(getServletContext().getRealPath(
-					"scenario.xml"));
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder documentBuilder = documentBuilderFactory
-					.newDocumentBuilder();
-			Document document = documentBuilder.parse(xmlFile);
-			NodeList nodeList = document.getElementsByTagName("step");
-
-			scenarioObjectList = new ArrayList<ScenarioObject>();
-
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				Node node = nodeList.item(i);
-				Element element = (Element) node;
-
-				String message = element.getAttribute("message");
-				int points = Integer.parseInt(element.getAttribute("points"));
-				
-				NodeList subNodeList = element.getElementsByTagName("button");
-
-				for (int j = 0; j < subNodeList.getLength(); j++) {
-					Element subElement = (Element) subNodeList.item(j);
-
-					ScenarioObject object = new ScenarioObject();
-
-					object.setNodeId(i);
-					object.setMessage(message);
-					object.setPoints(points);
-					object.setText(subElement.getAttribute("text"));
-					object.setColor(subElement.getAttribute("color"));
-					object.setBackground(subElement.getAttribute("background"));
-
-					scenarioObjectList.add(object);
-
-					numberLastNode = i;
-				}
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	protected void doGet(HttpServletRequest request,

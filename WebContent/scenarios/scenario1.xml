@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+	<step message="" points="1">
+		<button text="czerwony" color="czerwony" background=""></button>
+		<button text="zielony" color="czerwony" background=""></button>
+	</step>
+	<step message="" points="1">
+		<button text="czerwony" color="zielony" background="czerwony"></button>
+		<button text="zielony" color="zielony" background="czerwony"></button>
+	</step>
+	<step message="" points="1">
+		<button text="czerwony" color="czerwony" background="żółty"></button>
+		<button text="zielony" color="żółty" background="czerwony"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz czerwony!" points="2">
+		<button text="czerwony" color="zielony" background="żółty"></button>
+		<button text="zielony" color="zielony" background="żółty"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz zielony!" points="2">
+		<button text="zielony" color="czerwony" background="żółty"></button>
+		<button text="żółty" color="żółty" background="niebieski"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz niebieski!" points="2">
+		<button text="czerwony" color="żółty" background="zielony"></button>
+		<button text="niebieski" color="niebieski" background="żółty"></button>
+	</step>
+	<step message="" points="1">
+		<button text="pomarańczowy" color="żółty" background="niebieski"></button>
+		<button text="srebrny" color="srebrny" background="zielony"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz pomarańczowy!" points="2">
+		<button text="pomarańczowy" color="różowy" background="zielony"></button>
+		<button text="różowy" color="różowy" background="zielony"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz srebrny!" points="2">
+		<button text="niebieski" color="zielony" background="pomarańczowy"></button>
+		<button text="srebrny" color="srebrny" background="niebieski"></button>
+	</step>
+	<step message="Podpowiedź: Wybierz zielony!" points="2">
+		<button text="czarny" color="czarny" background=""></button>
+		<button text="żółty" color="czarny" background="żółty"></button>
+	</step>
+</scenario>

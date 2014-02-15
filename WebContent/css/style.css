@@ -21,6 +21,19 @@ form label {
 	margin-right: 10px;
 }
 
+form.home {
+	padding-top: 25px;
+}
+
+form.home p {
+	margin-top: 60px;
+	text-align: center;
+}
+
+form.home button {
+	margin: 0 5px;
+}
+
 form.quiz {
 	padding: 20px;
 }
@@ -59,31 +72,10 @@ table td {
 }
 
 {
-font-family
-:
- 
-sans-serif
-;
-
-
-font-size
-:
- 
-100%;
-color
-:
- 
-#444
-;
-
-
-background-color
-:
- 
-#ddd
-;
-
-
+font-family:sans-serif;
+font-size:100%;
+color:#444;
+background-color:#ddd;
 }
 .papers,.papers:before,.papers:after {
 	background-color: #fff;
@@ -198,4 +190,8 @@ background-color
      -moz-border-radius: 20px;
      -webkit-border-radius: 20px;
      background: #117300;
+}
+
+p.error {
+	text-align: center !important;
 }

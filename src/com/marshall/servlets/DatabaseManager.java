@@ -30,11 +30,12 @@ public class DatabaseManager {
 		
 		try {
 			PreparedStatement preparedStatement;
-			String setPlayerData = "INSERT INTO players (Name, Points) VALUES (?, ?)";
+			String setPlayerData = "INSERT INTO players (Name, Points, ScenarioId) VALUES (?, ?, ?)";
 			
 			preparedStatement = connection.prepareStatement(setPlayerData);
 			preparedStatement.setString(1, player.getName());
 			preparedStatement.setInt(2, player.getPoints());
+			preparedStatement.setInt(3, player.getScenarioId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			
@@ -44,13 +45,14 @@ public class DatabaseManager {
 			int userId = resultSet.getInt(1);
 			player.setId(userId);
 			
-			String setAnswersData = "INSERT INTO answers (UserId, QuestionId, IsCorrect, Time) VALUES (?, ?, ?, ?)";
+			String setAnswersData = "INSERT INTO answers (UserId, QuestionId, IsCorrect, Time, ScenarioId) VALUES (?, ?, ?, ?, ?)";
 			for (int i = 0; i < player.getQuestionsList().size() && i < player.getTimesList().size(); i++) {
 				preparedStatement = connection.prepareStatement(setAnswersData);
 				preparedStatement.setInt(1, userId);
 				preparedStatement.setInt(2, (i+1));
 				preparedStatement.setBoolean(3, player.getQuestionsList().get(i));
 				preparedStatement.setDouble(4, player.getTimesList().get(i));
+				preparedStatement.setInt(5, player.getScenarioId());
 				
 				preparedStatement.executeUpdate();
 				preparedStatement.close();
@@ -65,14 +67,16 @@ public class DatabaseManager {
 		return player;
 	}
 	
-	public ArrayList<Player> getTheBestPlayers() {
+	public ArrayList<Player> getTheBestPlayers(int scenarioId) {
 		ArrayList<Player> players = new ArrayList<Player>();
 		
 		try {
-			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			ResultSet resultSet = statement.executeQuery("SELECT Id, Name, Points, " +
+			PreparedStatement preparedStatement = connection.prepareStatement("SELECT Id, Name, Points, " +
 					"(SELECT SUM(a.Time) FROM answers a WHERE a.UserId = p.Id) AS Time " +
-					"From players p ORDER BY Points DESC, Time ASC LIMIT 20");
+					"From players p WHERE p.ScenarioId = ? ORDER BY Points DESC, Time ASC LIMIT 20");
+			preparedStatement.setInt(1, scenarioId);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next()) {
 				Player player = new Player();
